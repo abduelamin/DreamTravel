@@ -1,9 +1,16 @@
-import React from 'react'
+/* eslint-disable no-unused-vars */
+
+import React, { useContext } from "react";
+import { UserContext } from "../utils/Context.jsx"; 
 
 const Homepage = () => {
-  return (
-    <div>Homepage</div>
-  )
-}
+  const { user } = useContext(UserContext); 
 
-export default Homepage
+  return (
+    <div>
+      {user ? <h1>Welcome, {user.firstname}!</h1> : <h1>Please log in.</h1>}
+    </div>
+  );
+};
+
+export default Homepage;
