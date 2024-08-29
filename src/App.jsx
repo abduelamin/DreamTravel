@@ -8,11 +8,13 @@ import LoginPage from "./pages/LoginPage";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserProvider } from "./utils/Context.jsx";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <>
       <UserProvider>
+        <Navbar />
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/register" element={<RegisterPage />} />

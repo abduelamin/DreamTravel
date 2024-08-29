@@ -6,7 +6,7 @@ import api from "../utils/api";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../utils/Context.jsx";
+import { context } from "../utils/Context.jsx";
 
 const LoginPage = () => {
   const [formInput, setFormInput] = useState({
@@ -16,7 +16,7 @@ const LoginPage = () => {
 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { setUser } = useContext(UserContext)
+  const { setUser } = useContext(context)
   const navigate = useNavigate();
 
   const handleInput = (e) => {
@@ -40,7 +40,6 @@ const LoginPage = () => {
       if (accessToken) {
         const decodedUser = jwtDecode(accessToken);
         setUser(decodedUser);
-        console.log(decodedUser);
         navigate("/");
         setError(null);
       }

@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 
 import React, { useContext } from "react";
-import { UserContext } from "../utils/Context.jsx"; 
+import { context } from "../utils/Context.jsx"; 
 
 const Homepage = () => {
-  const { user } = useContext(UserContext); 
+  const { user } = useContext(context); 
 
   return (
     <div>
