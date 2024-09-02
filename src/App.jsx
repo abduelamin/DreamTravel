@@ -9,6 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserProvider } from "./utils/Context.jsx";
 import Navbar from "./components/Navbar";
+import CreateListing from "./pages/CreateListing.jsx";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/" element={<Homepage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/create-listing" element={<CreateListing />} />
         </Routes>
       </UserProvider>
     </>
