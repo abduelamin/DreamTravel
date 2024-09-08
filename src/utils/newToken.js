@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import api from "./api"
-import { Cookies } from 'js-cookie';
+import Cookies from "js-cookie";
 
 export const createNewAccessToken = async () => {
     try {

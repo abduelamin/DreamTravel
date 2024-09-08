@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUp } from "../utils/signUp";
-import image from "../assets/uploadPhoto.png";
+import image from "../assets/addimage.png";
 import backgroundImage from "../assets/register.jpg";
 
 const RegisterPage = () => {
@@ -145,7 +145,7 @@ const RegisterPage = () => {
                 alt="Profile Preview"
                 className="w-full h-full object-cover object-center"
               />
-              {!imagePreview && (
+              {!imagePreview || image && (
                 <p className="text-sm text-gray-500 mt-2">Upload Photo</p>
               )}
             </label>

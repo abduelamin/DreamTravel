@@ -1,60 +1,65 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
+import api from "../utils/api";
 import { categories, types, facilities } from "../data";
 import { RemoveCircleOutline, AddCircleOutline } from "@mui/icons-material";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { IoIosImages } from "react-icons/io";
 import { BiTrash } from "react-icons/bi";
+import Cookies from "js-cookie";
+import { isTokenExpired } from "./../utils/isTokenExpired";
+import { createNewAccessToken } from "./../utils/newToken";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CreateListing = () => {
+  let mycookie = Cookies.get("accessToken");
+  //  selection process
+  const [category, setCategory] = useState("");
+  const [type, setType] = useState("");
 
-//  selection process 
-const [category, setCategory] = useState("")
-const [type, setType] = useState("")
+  // Location function
 
+  const [formLocation, setFormLocation] = useState({
+    streetAddress: "",
+    aptSuite: "",
+    city: "",
+    province: "",
+    country: "",
+  });
 
- // Location function
+  const handleLocationChange = (e) => {
+    const { name, value } = e.target;
 
- const [formLocation, setFormLocation] = useState({
-    streetAddress: '',
-    aptSuite: '',
-    city: '',
-    province: '',
-    country: ''
- })
+    setFormLocation((prev) => ({ ...prev, [name]: value }));
+  };
 
- const handleLocationChange = (e) => {
-    const {name, value} = e.target
+  // Count section: bedroom, rooms etc...
 
-    setFormLocation((prev) => ({...prev, [name]: value}))
+  const [counts, setCounts] = useState({
+    Guests: 1,
+    Bedrooms: 1,
+    Beds: 1,
+    Bathrooms: 1,
+  });
 
- }
+  // Amenities section:
 
+  const [amenities, setAmenities] = useState([]); // User can select multiple amenities so its in an array to hold many items
 
- // Count section: bedroom, rooms etc...
+  const handleSelectAmenities = (facility) => {
+    if (amenities.includes(facility)) {
+      return setAmenities((prev) =>
+        prev.filter((option) => {
+          return option !== facility;
+        })
+      );
+    }
 
- const [counts, setCounts] = useState({
-  Guests: 1,
-  Bedrooms: 1,
-  Beds: 1,
-  Bathrooms: 1,
-});
+    return setAmenities((prev) => [...prev, facility]);
+  };
 
-
-// Amenities section:
-
-const [amenities, setAmenities] = useState([]) // User can select multiple amenities so its in an array to hold many items
-
-const handleSelectAmenities = (facility) => {
-  if (amenities.includes(facility)) {
-    return setAmenities(prev => prev.filter( option => {return option !== facility}  ))
-  }
-
-  return setAmenities(prev => [...prev, facility])
-}
-
-
-// Drop and drag photos section
+  // Drop and drag photos section
 
   const [photos, setPhotos] = useState([]);
 
@@ -75,26 +80,57 @@ const handleSelectAmenities = (facility) => {
     setPhotos((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
-
   // Description section
 
   const [formDescription, setFormDescription] = useState({
-    title: '',
-    description: '',
-    highlight: '',
-    highlightDesc: '',
-    price: 0
-  }
-  )
+    title: "",
+    description: "",
+    highlight: "",
+    highlightDesc: "",
+    price: 0,
+  });
 
   const handleChangeDescription = (e) => {
-    const {name, value} = e.target
-    setFormDescription(prev => ({...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormDescription((prev) => ({ ...prev, [name]: value }));
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("category", category);
+    formData.append("type", type);
+    formData.append("location", JSON.stringify(formLocation));
+    formData.append("counts", JSON.stringify(counts));
+    formData.append("amenities", JSON.stringify(amenities));
+    formData.append("description", JSON.stringify(formDescription));
+
+    // Append each file to FormData
+    photos.forEach((photo) => {
+      formData.append("photos", photo);
+    });
+
+    try {
+      const response = await api.post("/create-listing", formData,);
+      toast.success(response.data.message , {
+        className: 'bg-green-500 text-white',
+        bodyClassName: 'text-lg',
+        progressClassName: 'bg-green-700',
+        autoClose: 3000,
+        hideProgressBar: false
+      });
+    } catch (error) {
+      console.error(error);
+      if (isTokenExpired(mycookie)) {
+        mycookie = createNewAccessToken();
+      }
+    }
+  };
 
   return (
     <div className="bg-gray-100 p-10 lg:px-20">
+      <ToastContainer />
       <h1 className="text-3xl text-blue-600 font-bold">Publish Your Place</h1>
       <form>
         {/* Step 1 */}
@@ -111,7 +147,11 @@ const handleSelectAmenities = (facility) => {
               <div
                 key={index}
                 onClick={() => setCategory(item.label)}
-                className= {`flex flex-col justify-center items-center w-28 h-24 border $ rounded-lg cursor-pointer transition-all hover:border-pink-500 hover:bg-gray-100 ${category === item.label ? "border-pinkred border-4" : "border-gray-300"}`}
+                className={`flex flex-col justify-center items-center w-28 h-24 border $ rounded-lg cursor-pointer transition-all hover:border-pink-500 hover:bg-gray-100 ${
+                  category === item.label
+                    ? "border-pinkred border-4"
+                    : "border-gray-300"
+                }`}
               >
                 <div className="text-2xl">{item.icon}</div>
                 <p className="font-semibold text-center text-black">
@@ -129,7 +169,11 @@ const handleSelectAmenities = (facility) => {
               <div
                 key={index}
                 onClick={() => setType(item.name)}
-                className={`flex justify-between items-center max-w-lg p-4 border ${type === item.name ? " border-pinkred border-4" : "border-gray-300"} rounded-lg cursor-pointer transition-all hover:border-pink-500 hover:bg-gray-100`}
+                className={`flex justify-between items-center max-w-lg p-4 border ${
+                  type === item.name
+                    ? " border-pinkred border-4"
+                    : "border-gray-300"
+                } rounded-lg cursor-pointer transition-all hover:border-pink-500 hover:bg-gray-100`}
               >
                 <div>
                   <h4 className="text-lg font-semibold">{item.name}</h4>
@@ -150,7 +194,7 @@ const handleSelectAmenities = (facility) => {
                 type="text"
                 placeholder="Street Address"
                 name="streetAddress"
-                value = {formLocation.streetAddress}
+                value={formLocation.streetAddress}
                 onChange={handleLocationChange}
                 className="w-full border border-gray-300 p-4 rounded-lg"
                 required
@@ -214,43 +258,43 @@ const handleSelectAmenities = (facility) => {
             Property information
           </h3>
           <div className="flex flex-wrap gap-5 mt-5">
-  {["Guests", "Bedrooms", "Beds", "Bathrooms"].map((label) => (
-    <div
-      key={label}
-      className="flex items-center gap-5 p-4 border border-gray-300 rounded-lg"
-    >
-      <p className="font-semibold">{label}</p>
-      <div className="flex items-center gap-2">
-        <RemoveCircleOutline
-          onClick={() => {
-            setCounts((prevCounts) => ({
-              ...prevCounts,
-              [label]: Math.max(prevCounts[label] - 1, 1), 
-            }));
-          }}
-          sx={{
-            fontSize: "25px",
-            cursor: "pointer",
-            "&:hover": { color: "#F8395A" },
-          }}
-        />
-        <p>{counts[label]}</p>
-        <AddCircleOutline
-          onClick={() => {
-            setCounts((prevCounts) => ({
-              ...prevCounts,
-              [label]: prevCounts[label] + 1,
-            }));
-          }}
-          sx={{
-            fontSize: "25px",
-            cursor: "pointer",
-            "&:hover": { color: "#F8395A" },
-          }}
-        />
-      </div>
-    </div>
-  ))}
+            {["Guests", "Bedrooms", "Beds", "Bathrooms"].map((label) => (
+              <div
+                key={label}
+                className="flex items-center gap-5 p-4 border border-gray-300 rounded-lg"
+              >
+                <p className="font-semibold">{label}</p>
+                <div className="flex items-center gap-2">
+                  <RemoveCircleOutline
+                    onClick={() => {
+                      setCounts((prevCounts) => ({
+                        ...prevCounts,
+                        [label]: Math.max(prevCounts[label] - 1, 1),
+                      }));
+                    }}
+                    sx={{
+                      fontSize: "25px",
+                      cursor: "pointer",
+                      "&:hover": { color: "#F8395A" },
+                    }}
+                  />
+                  <p>{counts[label]}</p>
+                  <AddCircleOutline
+                    onClick={() => {
+                      setCounts((prevCounts) => ({
+                        ...prevCounts,
+                        [label]: prevCounts[label] + 1,
+                      }));
+                    }}
+                    sx={{
+                      fontSize: "25px",
+                      cursor: "pointer",
+                      "&:hover": { color: "#F8395A" },
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -268,11 +312,14 @@ const handleSelectAmenities = (facility) => {
               <div
                 key={index}
                 onClick={() => handleSelectAmenities(item)}
-                className={`flex flex-col justify-center items-center w-48 h-24 border  ${amenities.includes(item) ? " border-pinkred border-4" : "border-gray-300"} rounded-lg cursor-pointer transition-all hover:border-pink-500 hover:bg-gray-100`}
+                className={`flex flex-col justify-center items-center w-48 h-24 border  ${
+                  amenities.includes(item)
+                    ? " border-pinkred border-4"
+                    : "border-gray-300"
+                } rounded-lg cursor-pointer transition-all hover:border-pink-500 hover:bg-gray-100`}
               >
                 <div className="text-2xl">{item.icon}</div>
                 <p className="font-semibold">{item.name}</p>
-                
               </div>
             ))}
           </div>
@@ -416,7 +463,7 @@ const handleSelectAmenities = (facility) => {
                 placeholder="100"
                 name="price"
                 value={formDescription.price}
-              onChange={handleChangeDescription}
+                onChange={handleChangeDescription}
                 className="border border-gray-300 p-3 rounded-lg w-full max-w-xs ml-2"
                 required
               />
@@ -426,6 +473,7 @@ const handleSelectAmenities = (facility) => {
 
         <div className="flex justify-end mt-10">
           <button
+            onClick={handleSubmit}
             type="submit"
             className="bg-blue-600 text-pinkred px-6 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700"
           >
