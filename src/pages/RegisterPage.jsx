@@ -58,7 +58,7 @@ const RegisterPage = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-500"
+      className="min-h-screen w-screen flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-500"
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",

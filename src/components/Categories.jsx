@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 
 const Categories = () => {
     return (
-      <div className="py-12 px-16 sm:px-5 flex flex-col items-center text-center bg-lightgrey">
+      <div className="py-12 px-16 w-screen sm:px-5 flex flex-col items-center text-center bg-lightgrey">
         <h1 className="text-blue text-4xl font-extrabold mb-4">
           Explore Top Categories
         </h1>

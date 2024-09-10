@@ -11,8 +11,10 @@ import { isTokenExpired } from "./../utils/isTokenExpired";
 import { createNewAccessToken } from "./../utils/newToken";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
 
 const CreateListing = () => {
+  const navigate = useNavigate()
   let mycookie = Cookies.get("accessToken");
   //  selection process
   const [category, setCategory] = useState("");
@@ -113,13 +115,17 @@ const CreateListing = () => {
 
     try {
       const response = await api.post("/create-listing", formData,);
-      toast.success(response.data.message , {
+      if (response.data.message) {
+        toast.success(response.data.message , {
         className: 'bg-green-500 text-white',
         bodyClassName: 'text-lg',
         progressClassName: 'bg-green-700',
         autoClose: 3000,
         hideProgressBar: false
-      });
+      })
+      navigate('/')
+      }
+      ;
     } catch (error) {
       console.error(error);
       if (isTokenExpired(mycookie)) {
@@ -129,10 +135,10 @@ const CreateListing = () => {
   };
 
   return (
-    <div className="bg-gray-100 p-10 lg:px-20">
+    <div className="bg-gray-100 w-screen p-10 lg:px-20">
       <ToastContainer />
       <h1 className="text-3xl text-blue-600 font-bold">Publish Your Place</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         {/* Step 1 */}
         <div className="bg-white p-8 lg:p-10 rounded-2xl mt-10">
           <h2 className="text-xl text-pink-500 font-semibold">
