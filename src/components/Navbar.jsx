@@ -68,7 +68,7 @@ const Navbar = () => {
           <Menu sx={{ color: "#969393" }} />
           {user ? (
             <img
-              src={`http://localhost:8000/uploads/profileImage-1724930968945.jpg`} // Updated to use the correct image path
+              src={`http://localhost:8000/uploads/profileImage-1724930968945.jpg`} // Update to use the correct image path. This is hard coded for test purposes. Make sure to change it
               alt="Profile"
               className="w-10 h-10 object-cover rounded-full"
             />

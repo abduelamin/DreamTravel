@@ -51,7 +51,7 @@ const Listings = () => {
           {listings.length > 0 ? (
             listings.map((listing, index) => (
               <div key={index} className="listing-item">
-                <ListingCard></ListingCard>
+                <ListingCard listing={listing}/>
               </div>
             ))
           ) : (
