@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { UserProvider } from "./utils/Context.jsx";
 import Navbar from "./components/Navbar";
 import CreateListing from "./pages/CreateListing.jsx";
+import ListingDetails from "./pages/ListingDetails.jsx";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/create-listing" element={<CreateListing />} />
+          <Route path="/properties/:listingId" element={<ListingDetails />} />
         </Routes>
       </UserProvider>
     </>

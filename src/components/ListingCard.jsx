@@ -2,10 +2,12 @@
 /* eslint-disable no-unused-vars */
 import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 const ListingCard = ({ listing }) => {
+    const navigate = useNavigate()
   const [currentIndex, setCurrentIndex] = useState(0);
-  console.log(listing);
 
   // Parse the photos JSON and extract the `path` field due to the way psql returned them
   const parsedPhotos = listing.photos.map((photo) => {
@@ -44,15 +46,19 @@ const ListingCard = ({ listing }) => {
     setCurrentIndex((prev) => (prev + 1) % parsedPhotos.length);
   };
 
+  const takeTolistingDetails = () => {
+    navigate(`/properties/${listing.id}`)
+  }
+
   return (
-    <div className="relative cursor-pointer p-4 rounded-lg hover:shadow-lg">
+    <div className="relative cursor-pointer p-4 rounded-lg hover:shadow-lg" onClick={takeTolistingDetails}>
       <div className="w-72 overflow-hidden rounded-lg mb-4">
         <div
           className="flex transition-transform duration-500"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
           {parsedPhotos.map((photo, index) => (
-            <div className="relative flex-shrink-0 w-full h-64" key={index}>
+            <div className="relative flex-shrink-0 w-full h-64" key={index} >
               <img
                 src={photo}
                 alt="Home view"
