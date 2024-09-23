@@ -11,7 +11,6 @@ const Listings = () => {
   const [listings, setListings] = useState([]);
 
   useEffect(() => {
-    // GET request to fetch listings based on selected category
     const fetchListings = async () => {
       setLoading(true);
       try {

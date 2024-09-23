@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-const ListingCard = ({ listing }) => {
+const ListingCard = ({ listing, bookedTripDetails }) => {
     const navigate = useNavigate()
   const [currentIndex, setCurrentIndex] = useState(0);
 

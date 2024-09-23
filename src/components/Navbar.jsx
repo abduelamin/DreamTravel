@@ -109,7 +109,7 @@ const Navbar = () => {
               My Properties
             </NavLink>
             <NavLink
-              to="/reservations"
+              to={`${user.id}/reservations`}
               className="px-3 py-2 text-blue-500 font-bold hover:bg-gray-100 hover:text-pink-600"
             >
               Reservations
