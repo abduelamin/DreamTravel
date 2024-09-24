@@ -11,7 +11,6 @@ const Homepage = () => {
 
   return (
     <div>
-      {user && <h1>Welcome, {user.firstname}!</h1>}
     <Slide />
     <Categories/>
     <Listings/>

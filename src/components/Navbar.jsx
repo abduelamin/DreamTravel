@@ -11,7 +11,7 @@ const Navbar = () => {
   const { user } = useContext(context);
   const [dropdownMenu, setDropdownMenu] = useState(false);
 
- 
+ console.log(user);
 
 
   const handleClick = () => {
@@ -34,7 +34,7 @@ const Navbar = () => {
         <img src={placeholderLogo} alt="logo" className="w-24 cursor-pointer" />
       </NavLink>
 
-      <div className="flex items-center border border-gray-300 rounded-full h-12 px-5 gap-10 hover:shadow-md hidden lg:flex">
+      {/* <div className="flex items-center border border-gray-300 rounded-full h-12 px-5 gap-10 hover:shadow-md hidden lg:flex">
         <input
           type="text"
           placeholder="Search..."
@@ -43,7 +43,7 @@ const Navbar = () => {
         <IconButton>
           <Search sx={{ color: "#F8395A" }} />
         </IconButton>
-      </div>
+      </div> */}
 
       <div className="flex items-center gap-5">
         {user ? (
@@ -68,7 +68,7 @@ const Navbar = () => {
           <Menu sx={{ color: "#969393" }} />
           {user ? (
             <img
-              src={`http://localhost:8000/uploads/profileImage-1724930968945.jpg`} // Update to use the correct image path. This is hard coded for test purposes. Make sure to change it
+              src={`http://localhost:8000${user.profileImage}`}
               alt="Profile"
               className="w-10 h-10 object-cover rounded-full"
             />
@@ -103,7 +103,7 @@ const Navbar = () => {
               Wish List
             </NavLink>
             <NavLink
-              to="/propertylist"
+              to={`/${user.id}/myproperties`}
               className="px-3 py-2 text-blue-500 font-bold hover:bg-gray-100 hover:text-pink-600"
             >
               My Properties
