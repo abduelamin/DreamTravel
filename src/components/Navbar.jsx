@@ -97,7 +97,7 @@ const Navbar = () => {
         {dropdownMenu && user && (
           <div className="absolute right-14 top-20 flex flex-col w-48 bg-white border border-gray-200 rounded-xl p-2 shadow-lg z-50">
             <NavLink
-              to="/wishlist"
+              to={`${user.id}/wishlist`}
               className="px-3 py-2 text-blue-500 font-bold hover:bg-gray-100 hover:text-pink-600"
             >
               Wish List

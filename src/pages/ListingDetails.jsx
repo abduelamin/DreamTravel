@@ -29,6 +29,8 @@ const ListingDetails = () => {
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [isInWatchlist, setIsInWatchlist] = useState(false);
+  const { user } = useContext(context);
 
   useEffect(() => {
     const getListingDetails = async () => {
@@ -98,24 +100,29 @@ const ListingDetails = () => {
     }
   };
 
-  const start = dateRange[0]?.startDate
-    ? new Date(dateRange[0].startDate)
-    : new Date();
-  const end = dateRange[0]?.endDate
-    ? new Date(dateRange[0].endDate)
-    : new Date();
+  const start = dateRange[0]?.startDate || new Date();
+  const end = dateRange[0]?.endDate || new Date();
   const dayCount = Math.round((end - start) / (1000 * 60 * 60 * 24));
 
-  if (loading) {
-    return <Typography>Loading...</Typography>;
-  }
+  useEffect(() => {
+    const checkWatchlistStatus = async () => {
+      if (user) {
+        try {
+          const response = await api.get(`/wishlist/${user.id}`);
+          const watchlistItems = response.data;
+          const isListed = watchlistItems.some(
+            (item) => item.id == listingId
+          );
+          setIsInWatchlist(isListed);
+        } catch (error) {
+          console.error("Error fetching watchlist status:", error);
+        }
+      }
+    };
 
-  if (!listing) {
-    return <Typography>Listing not found</Typography>;
-  }
+    checkWatchlistStatus();
+  }, []);
 
-  const { user } = useContext(context);
-  console.log(user);
   const submitBooking = async () => {
     const bookingForm = {
       customerId: user.id,
@@ -127,11 +134,37 @@ const ListingDetails = () => {
     try {
       const response = await api.post("/createBooking", bookingForm);
       console.log(response.data);
-      response.data ? navigate(`/${user.id}/reservations`) : null;
+      if (response.data) {
+        navigate(`/${user.id}/reservations`);
+      }
     } catch (error) {
       console.log("Submit Booking Failed:", error.message);
     }
   };
+
+  const AddToWatchlist = async () => {
+    try {
+      if (isInWatchlist) {
+        // Remove from watchlist
+        await api.delete(`/wishlist/${user.id}/${listingId}`);
+        setIsInWatchlist(false);
+      } else {
+        // Add to watchlist
+        await api.post(`/wishlist/${user.id}/${listingId}`);
+        setIsInWatchlist(true);
+      }
+    } catch (error) {
+      console.error("Error updating watchlist:", error);
+    }
+  };
+
+  if (loading) {
+    return <Typography>Loading...</Typography>;
+  }
+
+  if (!listing) {
+    return <Typography>Listing not found</Typography>;
+  }
 
   return (
     <div className="w-screen">
@@ -140,10 +173,13 @@ const ListingDetails = () => {
           <Typography variant="h4" fontWeight="bold">
             {listing.title}
           </Typography>
-          <IconButton color="primary" aria-label="save listing">
+          <IconButton
+            color={isInWatchlist ? "secondary" : "primary"}
+            onClick={AddToWatchlist}
+          >
             <FavoriteIcon />
             <Typography variant="body1" fontWeight="bold" ml={1}>
-              Save
+              {isInWatchlist ? "Saved" : "Save"}
             </Typography>
           </IconButton>
         </Grid>

@@ -12,6 +12,7 @@ import Navbar from "./components/Navbar";
 import CreateListing from "./pages/CreateListing.jsx";
 import ListingDetails from "./pages/ListingDetails.jsx";
 import Reservations from "./pages/Reservations.jsx";
+import Wishlist from "./pages/Wishlist.jsx";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/create-listing" element={<CreateListing />} />
           <Route path="/properties/:listingId" element={<ListingDetails />} />
           <Route path="/:userId/reservations" element={<Reservations />} />
+          <Route path="/:userId/wishlist" element={<Wishlist />} />
         </Routes>
       </UserProvider>
     </>
