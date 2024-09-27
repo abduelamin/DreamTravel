@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUp } from "../utils/signUp";
-import image from "../assets/addimage.png";
+import image from "../assets/addImage.png";
 import backgroundImage from "../assets/register.jpg";
 
 const RegisterPage = () => {
