@@ -50,6 +50,7 @@ import countryCat from './assets/countryside_cat.webp';
 import poolCat from './assets/pool_cat.jpg';
 import islandCat from './assets/island_cat.webp';
 import lakeCat from './assets/lake_cat.webp';
+import beachCat from "./assets/beach_cat.jpg"
 
 
 
@@ -59,7 +60,7 @@ export const categories = [
     icon: <BiWorld />,
   },
   {
-    img: 'src/assets/beach_cat.jpg',
+    img: beachCat,
     label: "Beachfront",
     icon: <TbBeach />,
     description: "This property is close to the beach!",
