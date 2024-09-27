@@ -36,7 +36,7 @@ const ListingDetails = () => {
     const getListingDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/properties/${listingId}`
+          `https://dreamnest-backend.onrender.com/api/properties/${listingId}`
         );
         const listingData = response.data;
 
@@ -61,7 +61,7 @@ const ListingDetails = () => {
           ) {
             return photoString;
           }
-          return `http://localhost:8000/uploads/${photoString}`;
+          return `https://dreamnest-backend.onrender.com/uploads/${photoString}`;
         });
 
         setListing(listingData);
@@ -205,7 +205,7 @@ const ListingDetails = () => {
         <Box display="flex" alignItems="center" justifyContent="center">
           {listing.profile_picture_url && (
             <Avatar
-              src={`http://localhost:8000${listing.profile_picture_url}`}
+              src={`https://dreamnest-backend.onrender.com${listing.profile_picture_url}`}
               alt={`${listing.firstname}'s profile`}
               sx={{ width: 64, height: 64, mr: 2 }}
             />

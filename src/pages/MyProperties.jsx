@@ -43,7 +43,7 @@ const MyProperties = () => {
           onClick={() => handleNavigate(property.id)}
         >
           <img
-            src={`http://localhost:8000/uploads/${property.photos[0]}`}
+            src={`https://dreamnest-backend.onrender.com/uploads/${property.photos[0]}`}
             alt={property.title}
             className="w-full h-48 object-cover"
           />

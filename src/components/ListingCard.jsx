@@ -24,7 +24,7 @@ const ListingCard = ({ listing, bookedTripDetails }) => {
         ""
       );
   
-      return `http://localhost:8000/uploads/${parsedPhoto.filename}`;
+      return `https://dreamnest-backend.onrender.com/uploads/${parsedPhoto.filename}`;
     } catch (error) {
       console.error("Error parsing photo:", error);
       return "";

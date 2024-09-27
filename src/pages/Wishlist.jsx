@@ -16,7 +16,7 @@ const Wishlist = () => {
             const parsedPhotos = listing.photos.map((photo) => {
               try {
                 const photoObject = JSON.parse(photo);
-                return photoObject.filename; // extract only filename
+                return photoObject.filename; 
               } catch (error) {
                 console.error("Error parsing photo:", error);
                 return "";
@@ -49,7 +49,7 @@ const Wishlist = () => {
         >
           <div className="relative">
             <img
-              src={`http://localhost:8000/uploads/${fav.photos[0]}`} 
+              src={`https://dreamnest-backend.onrender.com/uploads/${fav.photos[0]}`} 
               alt={fav.title}
               className="w-full h-56 object-cover transition duration-500 transform group-hover:scale-110"
             />

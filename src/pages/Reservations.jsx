@@ -23,7 +23,7 @@ const Reservations = () => {
                   const jsonString = photo.match(/{.*}/);
                   if (jsonString) {
                     const parsedPhoto = JSON.parse(jsonString[0]);
-                    return `http://localhost:8000/uploads/${parsedPhoto.filename}`;
+                    return `https://dreamnest-backend.onrender.com/uploads/${parsedPhoto.filename}`;
                   }
                   return "";
                 } catch (error) {
