@@ -35,6 +35,7 @@ const LoginPage = () => {
         withCredentials: true,
       });
 
+      console.log(response.data);
       const accessToken = Cookies.get("accessToken");
 
       if (accessToken) {
