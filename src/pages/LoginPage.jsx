@@ -38,6 +38,7 @@ const LoginPage = () => {
       const accessToken = Cookies.get("accessToken");
 
       console.log(accessToken);
+      console.log("documentCooke:", document.cookie);
 
       if (accessToken) {
         const decodedUser = jwtDecode(accessToken);
