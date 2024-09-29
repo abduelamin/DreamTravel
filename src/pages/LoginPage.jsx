@@ -35,11 +35,13 @@ const LoginPage = () => {
         withCredentials: true,
       });
 
-      console.log(response.data);
       const accessToken = Cookies.get("accessToken");
+
+      console.log(accessToken);
 
       if (accessToken) {
         const decodedUser = jwtDecode(accessToken);
+        console.log(decodedUser);
         setUser(decodedUser);
         navigate("/");
         setError(null);
