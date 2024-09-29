@@ -34,15 +34,14 @@ const LoginPage = () => {
       const response = await api.post("/login", formInput, {
         withCredentials: true,
       });
-
-      const accessToken = Cookies.get("accessToken");
-
-      console.log(accessToken);
-      console.log("documentCooke:", document.cookie);
-
+  
+      // Attempt to get the access token from cookies first
+      const accessToken = Cookies.get("accessToken") || response.data.accessToken;
+  
       if (accessToken) {
+        // Store in local storage as a fallback
+        localStorage.setItem("accessToken", accessToken);
         const decodedUser = jwtDecode(accessToken);
-        console.log(decodedUser);
         setUser(decodedUser);
         navigate("/");
         setError(null);
