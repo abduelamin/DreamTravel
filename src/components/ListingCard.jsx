@@ -4,40 +4,23 @@ import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
-const ListingCard = ({ listing, bookedTripDetails }) => {
-    const navigate = useNavigate()
+const ListingCard = ({ listing }) => {
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Parse the photos JSON and extract the `path` field due to the way psql returned them
- 
+  // Process photos to normalize URLs
   const parsedPhotos = listing.photos.map((photo) => {
-    try {
-    
-      const parsedPhoto = JSON.parse(photo);
-  
-      // Normalize the path by replacing backslashes with forward slashes
-      let normalizedPath = parsedPhoto.path.replace(/\\/g, "/");
-  
-      // Remove the portion of the path. This below portion of the path was an error on my part when handling file uploads. I saved the full path to the db and so when I made my GET req, I could this full path and couldn't display my photos
-      normalizedPath = normalizedPath.replace(
-        "C:/Users/Home/Desktop/My react projects/FS Real estate app/ElaminEstate-BACKEND/",
-        ""
-      );
-  
-      return `https://dreamnest-backend.onrender.com${parsedPhoto.filename}`; // filename already contains the relative /uploads/ so I remvoed that part of the BE url
-    } catch (error) {
-      console.error("Error parsing photo:", error);
-      return "";
+    // If the photo is already a full URL, return it as is
+    if (photo.startsWith("http://") || photo.startsWith("https://")) {
+      return photo;
     }
+    // Otherwise, treat it as a relative path and prepend your backend URL
+    return `https://dreamnest-backend.onrender.com${photo}`;
   });
 
   // Slider functions for navigating between images
   const goToPrevSlide = () => {
     setCurrentIndex(
-        /* Each photo has an index. This takes the index and subtracts 1 and adds the length of the photo array to it and then finds the remainder. e.g. Say Im at index 3. If the clicks on the backarrow and we have 6 photos, this will do the following:  (3-1 + 6) / 6.  which is 2 + 6 = 8. 8/6 gives us 2 remainder. Therfore 2 is return and index 2 is shown  
-        
-        */
       (prev) => (prev - 1 + parsedPhotos.length) % parsedPhotos.length
     );
   };
@@ -47,8 +30,8 @@ const ListingCard = ({ listing, bookedTripDetails }) => {
   };
 
   const takeTolistingDetails = () => {
-    navigate(`/properties/${listing.id}`)
-  }
+    navigate(`/properties/${listing.id}`);
+  };
 
   return (
     <div className="relative cursor-pointer p-4 rounded-lg hover:shadow-lg" onClick={takeTolistingDetails}>
@@ -58,7 +41,7 @@ const ListingCard = ({ listing, bookedTripDetails }) => {
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
           {parsedPhotos.map((photo, index) => (
-            <div className="relative flex-shrink-0 w-full h-64" key={index} >
+            <div className="relative flex-shrink-0 w-full h-64" key={index}>
               <img
                 src={photo}
                 alt="Home view"
