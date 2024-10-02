@@ -9,19 +9,19 @@ import { BiTrash } from "react-icons/bi";
 import Cookies from "js-cookie";
 import { isTokenExpired } from "./../utils/isTokenExpired";
 import { createNewAccessToken } from "./../utils/newToken";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 
 const CreateListing = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   let mycookie = Cookies.get("accessToken");
-
-  // Selection process
+  //  selection process
   const [category, setCategory] = useState("");
   const [type, setType] = useState("");
 
   // Location function
+
   const [formLocation, setFormLocation] = useState({
     streetAddress: "",
     aptSuite: "",
@@ -32,10 +32,12 @@ const CreateListing = () => {
 
   const handleLocationChange = (e) => {
     const { name, value } = e.target;
+
     setFormLocation((prev) => ({ ...prev, [name]: value }));
   };
 
   // Count section: bedroom, rooms etc...
+
   const [counts, setCounts] = useState({
     Guests: 1,
     Bedrooms: 1,
@@ -44,18 +46,23 @@ const CreateListing = () => {
   });
 
   // Amenities section:
-  const [amenities, setAmenities] = useState([]);
+
+  const [amenities, setAmenities] = useState([]); // User can select multiple amenities so its in an array to hold many items
 
   const handleSelectAmenities = (facility) => {
     if (amenities.includes(facility)) {
       return setAmenities((prev) =>
-        prev.filter((option) => option !== facility)
+        prev.filter((option) => {
+          return option !== facility;
+        })
       );
     }
+
     return setAmenities((prev) => [...prev, facility]);
   };
 
   // Drop and drag photos section
+
   const [photos, setPhotos] = useState([]);
 
   const handleUploadPhotos = (e) => {
@@ -76,6 +83,7 @@ const CreateListing = () => {
   };
 
   // Description section
+
   const [formDescription, setFormDescription] = useState({
     title: "",
     description: "",
@@ -106,28 +114,21 @@ const CreateListing = () => {
     });
 
     try {
-      const response = await api.post("/create-listing", formData);
+      const response = await api.post("/create-listing", formData,);
       console.log(response.data);
       if (response.data.message) {
-        toast.success(response.data.message, {
-          className: "bg-green-500 text-white",
-          bodyClassName: "text-lg",
-          progressClassName: "bg-green-700",
-          autoClose: 3000,
-          hideProgressBar: false,
-        });
-        navigate("/");
+        toast.success(response.data.message , {
+        className: 'bg-green-500 text-white',
+        bodyClassName: 'text-lg',
+        progressClassName: 'bg-green-700',
+        autoClose: 3000,
+        hideProgressBar: false
+      })
+      navigate('/')
       }
+      ;
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred while submitting the form", {
-        className: "bg-red-500 text-white",
-        bodyClassName: "text-lg",
-        progressClassName: "bg-red-700",
-        autoClose: 3000,
-        hideProgressBar: false,
-      });
-
       if (isTokenExpired(mycookie)) {
         mycookie = createNewAccessToken();
       }
@@ -261,202 +262,231 @@ const CreateListing = () => {
           </div>
 
           <h3 className="text-lg text-blue-600 font-semibold mt-10">
-            How many guests would you like to welcome?
+            Property information
           </h3>
-          <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
-            {Object.keys(counts).map((key) => (
-              <div key={key}>
-                <p className="font-semibold">{key}</p>
-                <div className="flex items-center gap-5">
+          <div className="flex flex-wrap gap-5 mt-5">
+            {["Guests", "Bedrooms", "Beds", "Bathrooms"].map((label) => (
+              <div
+                key={label}
+                className="flex items-center gap-5 p-4 border border-gray-300 rounded-lg"
+              >
+                <p className="font-semibold">{label}</p>
+                <div className="flex items-center gap-2">
                   <RemoveCircleOutline
-                    className="cursor-pointer"
-                    onClick={() =>
-                      setCounts((prev) => ({
-                        ...prev,
-                        [key]: Math.max(prev[key] - 1, 1),
-                      }))
-                    }
+                    onClick={() => {
+                      setCounts((prevCounts) => ({
+                        ...prevCounts,
+                        [label]: Math.max(prevCounts[label] - 1, 1),
+                      }));
+                    }}
+                    sx={{
+                      fontSize: "25px",
+                      cursor: "pointer",
+                      "&:hover": { color: "#F8395A" },
+                    }}
                   />
-                  <span>{counts[key]}</span>
+                  <p>{counts[label]}</p>
                   <AddCircleOutline
-                    className="cursor-pointer"
-                    onClick={() =>
-                      setCounts((prev) => ({
-                        ...prev,
-                        [key]: prev[key] + 1,
-                      }))
-                    }
+                    onClick={() => {
+                      setCounts((prevCounts) => ({
+                        ...prevCounts,
+                        [label]: prevCounts[label] + 1,
+                      }));
+                    }}
+                    sx={{
+                      fontSize: "25px",
+                      cursor: "pointer",
+                      "&:hover": { color: "#F8395A" },
+                    }}
                   />
                 </div>
               </div>
             ))}
           </div>
-
-          <h3 className="text-lg text-blue-600 font-semibold mt-10">
-            What amenities do you offer?
-          </h3>
-          <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {facilities.map((facility, index) => (
-              <div
-                key={index}
-                className={`p-4 border ${
-                  amenities.includes(facility)
-                    ? "border-pinkred border-4"
-                    : "border-gray-300"
-                } rounded-lg cursor-pointer transition-all hover:border-pink-500 hover:bg-gray-100`}
-                onClick={() => handleSelectAmenities(facility)}
-              >
-                <p className="font-semibold">{facility}</p>
-              </div>
-            ))}
-          </div>
-
-          <h3 className="text-lg text-blue-600 font-semibold mt-10">
-            Add photos of your place
-          </h3>
-          <div className="mt-5">
-            <label
-              htmlFor="photos"
-              className="flex flex-col items-center justify-center border border-dashed p-10 w-full rounded-xl cursor-pointer hover:bg-gray-100"
-            >
-              <IoIosImages className="text-4xl text-blue-600" />
-              <p className="font-semibold mt-3">Upload Photos</p>
-              <input
-                id="photos"
-                type="file"
-                multiple
-                onChange={handleUploadPhotos}
-                className="hidden"
-              />
-            </label>
-          </div>
-
-          {photos.length > 0 && (
-            <DragDropContext onDragEnd={handleDragPhoto}>
-              <Droppable droppableId="photos" direction="horizontal">
-                {(provided) => (
-                  <ul
-                    className="flex mt-5 space-x-5 overflow-x-auto"
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    {photos.map((photo, index) => (
-                      <Draggable
-                        key={index}
-                        draggableId={`photo-${index}`}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <li
-                            className="relative"
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            ref={provided.innerRef}
-                          >
-                            <img
-                              src={URL.createObjectURL(photo)}
-                              alt="Uploaded"
-                              className="h-40 w-40 object-cover rounded-lg"
-                            />
-                            <button
-                              className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-lg"
-                              onClick={() => handleRemovePhoto(index)}
-                              type="button"
-                            >
-                              <BiTrash className="text-red-600" />
-                            </button>
-                          </li>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </ul>
-                )}
-              </Droppable>
-            </DragDropContext>
-          )}
         </div>
 
         {/* Step 2 */}
         <div className="bg-white p-8 lg:p-10 rounded-2xl mt-10">
           <h2 className="text-xl text-pink-500 font-semibold">
-            Step 2: Describe your place
+            Step 2: Make your place stand out
           </h2>
           <hr className="my-6" />
-          <h3 className="text-lg text-blue-600 font-semibold">Title</h3>
-          <input
-            type="text"
-            placeholder="Title"
-            name="title"
-            value={formDescription.title}
-            onChange={handleChangeDescription}
-            className="w-full border border-gray-300 p-4 rounded-lg"
-            required
-          />
+          <h3 className="text-lg text-blue-600 font-semibold">
+            What extras does your place have?
+          </h3>
+          <div className="flex flex-wrap gap-5 mt-5">
+            {facilities.map((item, index) => (
+              <div
+                key={index}
+                onClick={() => handleSelectAmenities(item)}
+                className={`flex flex-col justify-center items-center w-48 h-24 border  ${
+                  amenities.includes(item)
+                    ? " border-pinkred border-4"
+                    : "border-gray-300"
+                } rounded-lg cursor-pointer transition-all hover:border-pink-500 hover:bg-gray-100`}
+              >
+                <div className="text-2xl">{item.icon}</div>
+                <p className="font-semibold">{item.name}</p>
+              </div>
+            ))}
+          </div>
 
           <h3 className="text-lg text-blue-600 font-semibold mt-10">
-            Description
+            Add some photos of your place
           </h3>
-          <textarea
-            placeholder="Write a short summary of your place"
-            name="description"
-            value={formDescription.description}
-            onChange={handleChangeDescription}
-            className="w-full border border-gray-300 p-4 rounded-lg"
-            rows="4"
-            required
-          />
-
-          <h3 className="text-lg text-blue-600 font-semibold mt-10">
-            Highlight your listing
+          <DragDropContext onDragEnd={handleDragPhoto}>
+            <Droppable droppableId="photos" direction="horizontal">
+              {(provided) => (
+                <div
+                  className="flex flex-wrap gap-5 mt-5"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {photos.length < 1 && (
+                    <>
+                      <input
+                        type="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleUploadPhotos}
+                        multiple
+                        id="image"
+                      />
+                      <label
+                        htmlFor="image"
+                        className="flex flex-col justify-center items-center w-full max-w-lg h-48 border border-dashed border-gray-300 rounded-lg cursor-pointer"
+                      >
+                        <div className="text-5xl text-gray-400">
+                          <IoIosImages />
+                        </div>
+                        <p className="font-semibold">Upload from your device</p>
+                      </label>
+                    </>
+                  )}
+                  {photos.length >= 1 && (
+                    <>
+                      {photos.map((photo, index) => (
+                        <Draggable
+                          key={index}
+                          draggableId={index.toString()}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <div
+                              className="relative w-64 h-40 cursor-move"
+                              {...provided.draggableProps}
+                              ref={provided.innerRef}
+                              {...provided.dragHandleProps}
+                            >
+                              <img
+                                src={URL.createObjectURL(photo)}
+                                alt="place"
+                                className="w-full h-full object-cover rounded-lg"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleRemovePhoto(index)}
+                                className="absolute right-2 top-2 bg-white p-1 rounded-full text-xl text-red-500 hover:text-red-700"
+                              >
+                                <BiTrash />
+                              </button>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      <input
+                        type="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleUploadPhotos}
+                        multiple
+                        id="image"
+                      />
+                      <label
+                        htmlFor="image"
+                        className="flex flex-col justify-center items-center w-64 h-40 border border-dashed border-gray-300 rounded-lg cursor-pointer"
+                      >
+                        <div className="text-5xl text-gray-400">
+                          <IoIosImages />
+                        </div>
+                        <p className="font-semibold">Add more photos</p>
+                      </label>
+                    </>
+                  )}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+          <h3 className="text-blue-600 text-xl mt-10 mb-5">
+            What makes your place attractive?
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
-            <div>
-              <p className="font-semibold">Highlight</p>
+          <div className="description">
+            <p className="font-semibold">Title</p>
+            <input
+              type="text"
+              placeholder="Title"
+              name="title"
+              value={formDescription.title}
+              onChange={handleChangeDescription}
+              className="border border-gray-300 p-3 rounded-lg w-full"
+              required
+            />
+            <p className="font-semibold mt-5">Description</p>
+            <textarea
+              placeholder="Description"
+              name="description"
+              value={formDescription.description}
+              onChange={handleChangeDescription}
+              rows={5}
+              className="border border-gray-300 p-3 rounded-lg w-full"
+              required
+            />
+            <p className="font-semibold mt-5">Highlight</p>
+            <input
+              type="text"
+              placeholder="Highlight"
+              name="highlight"
+              value={formDescription.highlight}
+              onChange={handleChangeDescription}
+              className="border border-gray-300 p-3 rounded-lg w-full"
+              required
+            />
+            <p className="font-semibold mt-5">Highlight Details</p>
+            <textarea
+              placeholder="Highlight Details"
+              name="highlightDesc"
+              value={formDescription.highlightDesc}
+              onChange={handleChangeDescription}
+              rows={5}
+              className="border border-gray-300 p-3 rounded-lg w-full"
+              required
+            />
+            <p className="font-semibold mt-10">Now, set your PRICE</p>
+            <div className="flex items-center mt-3">
+              <span className="text-xl font-bold">$</span>
               <input
-                type="text"
-                placeholder="Highlight"
-                name="highlight"
-                value={formDescription.highlight}
+                type="number"
+                placeholder="100"
+                name="price"
+                value={formDescription.price}
                 onChange={handleChangeDescription}
-                className="w-full border border-gray-300 p-4 rounded-lg"
-                required
-              />
-            </div>
-            <div>
-              <p className="font-semibold">Highlight Description</p>
-              <input
-                type="text"
-                placeholder="Highlight Description"
-                name="highlightDesc"
-                value={formDescription.highlightDesc}
-                onChange={handleChangeDescription}
-                className="w-full border border-gray-300 p-4 rounded-lg"
+                className="border border-gray-300 p-3 rounded-lg w-full max-w-xs ml-2"
                 required
               />
             </div>
           </div>
-
-          <h3 className="text-lg text-blue-600 font-semibold mt-10">
-            Price Per Night
-          </h3>
-          <input
-            type="number"
-            placeholder="Price"
-            name="price"
-            value={formDescription.price}
-            onChange={handleChangeDescription}
-            className="w-full border border-gray-300 p-4 rounded-lg"
-            required
-          />
         </div>
 
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-10 py-4 rounded-full mt-10"
-        >
-          Create Listing
-        </button>
+        <div className="flex justify-end mt-10">
+          <button
+            onClick={handleSubmit}
+            type="submit"
+            className="bg-blue-600 text-pinkred px-6 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700"
+          >
+            Publish
+          </button>
+        </div>
       </form>
     </div>
   );
