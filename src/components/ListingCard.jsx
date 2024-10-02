@@ -10,7 +10,7 @@ const ListingCard = ({ listing, bookedTripDetails }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Parse the photos JSON and extract the `path` field due to the way psql returned them
-  console.log("lisitingCardComponent:",listing.photos);
+ 
   const parsedPhotos = listing.photos.map((photo) => {
     try {
     
@@ -25,13 +25,12 @@ const ListingCard = ({ listing, bookedTripDetails }) => {
         ""
       );
   
-      return `https://dreamnest-backend.onrender.com/uploads/${parsedPhoto.filename}`;
+      return `https://dreamnest-backend.onrender.com${parsedPhoto.filename}`; // filename already contains the relative /uploads/ so I remvoed that part of the BE url
     } catch (error) {
       console.error("Error parsing photo:", error);
       return "";
     }
   });
-  
 
   // Slider functions for navigating between images
   const goToPrevSlide = () => {
