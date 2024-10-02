@@ -14,6 +14,7 @@ const Reservations = () => {
     const fetchBookings = async () => {
       try {
         const response = await api.get(`/${userId}/myBookingsWithDetails`);
+        console.log("Reservvations:", response.data);
         if (response.data) {
           const tripsWithParsedPhotos = response.data.map((trip) => {
             return {

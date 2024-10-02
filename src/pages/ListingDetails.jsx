@@ -40,6 +40,7 @@ const ListingDetails = () => {
         );
         const listingData = response.data;
 
+        console.log("lisitingDetalsPage:", response.data);
         // Parse facilities
         listingData.facilities = listingData.facilities.map(
           (facilityString) => {

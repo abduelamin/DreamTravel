@@ -10,6 +10,7 @@ const ListingCard = ({ listing, bookedTripDetails }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Parse the photos JSON and extract the `path` field due to the way psql returned them
+  console.log("lisitingCardComponent:",listing.photos);
   const parsedPhotos = listing.photos.map((photo) => {
     try {
     
