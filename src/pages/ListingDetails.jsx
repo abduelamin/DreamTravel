@@ -64,18 +64,18 @@ const ListingDetails = () => {
         //   }
         //   return `https://dreamnest-backend.onrender.com/uploads/${photoString}`;
         // });
-        listingData.photos = listingData.photos.map((photoString) => {
-          if (photoString.startsWith("http://localhost") || photoString.startsWith("https://localhost")) {
-            // Replace localhost with the correct backend URL
-            return photoString.replace("http://localhost:8000", "https://dreamnest-backend.onrender.com");
-          }
-          if (photoString.startsWith("https://")) {
-            // If it's already a valid URL, return it as is
-            return photoString;
-          }
-          // Otherwise, construct the URL using the uploads directory
-          return `https://dreamnest-backend.onrender.com${photoString}`;
-        });
+        // listingData.photos = listingData.photos.map((photoString) => {
+        //   if (photoString.startsWith("http://localhost") || photoString.startsWith("https://localhost")) {
+        //     // Replace localhost with the correct backend URL
+        //     return photoString.replace("http://localhost:8000", "https://dreamnest-backend.onrender.com");
+        //   }
+        //   if (photoString.startsWith("https://")) {
+        //     // If it's already a valid URL, return it as is
+        //     return photoString;
+        //   }
+        //   // Otherwise, construct the URL using the uploads directory
+        //   return `https://dreamnest-backend.onrender.com${photoString}`;
+        // });
 
         setListing(listingData);
         setLoading(false);
