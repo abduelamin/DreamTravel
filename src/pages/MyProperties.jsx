@@ -12,7 +12,7 @@ const MyProperties = () => {
     const fetchMyProperties = async () => {
       try {
         const response = await api.get(`/my-properties/${user.id}`);
-
+        console.log("myproperties:", response.data);
         const resWithParsedPhotos = response.data.map((listing) => {
           const parsePhoto = listing.photos.map((photo) => {
             const photoObject = JSON.parse(photo);

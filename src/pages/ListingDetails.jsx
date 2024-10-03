@@ -146,7 +146,6 @@ const ListingDetails = () => {
     };
     try {
       const response = await api.post("/createBooking", bookingForm);
-      console.log(response.data);
       if (response.data) {
         navigate(`/${user.id}/reservations`);
       }

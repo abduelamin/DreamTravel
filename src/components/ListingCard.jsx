@@ -10,7 +10,6 @@ const ListingCard = ({ listing }) => {
 
   // Process photos to normalize URLs
   const parsedPhotos = listing.photos.map((photo) => {
-    console.log("listingCARD",photo);
     // If the photo is already a full URL, return it as is
     // if (photo.startsWith("http://") || photo.startsWith("https://")) {
     //   return photo;
