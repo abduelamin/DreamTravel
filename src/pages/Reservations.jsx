@@ -14,7 +14,7 @@ const Reservations = () => {
     const fetchBookings = async () => {
       try {
         const response = await api.get(`/${userId}/myBookingsWithDetails`);
-        console.log("Reservvations:", response.data);
+        console.log("Reservations:", response.data);
         if (response.data) {
           const tripsWithParsedPhotos = response.data.map((trip) => {
             return {
@@ -24,6 +24,13 @@ const Reservations = () => {
                   const jsonString = photo.match(/{.*}/);
                   if (jsonString) {
                     const parsedPhoto = JSON.parse(jsonString[0]);
+  
+                    // Check if the photo URL is already fully qualified
+                    if (parsedPhoto.filename.includes("http")) {
+                      return parsedPhoto.filename;  // Return as is if it's a full URL
+                    }
+  
+                    // If it's just a filename, prepend the base URL
                     return `https://dreamnest-backend.onrender.com/uploads/${parsedPhoto.filename}`;
                   }
                   return "";
@@ -34,7 +41,7 @@ const Reservations = () => {
               }),
             };
           });
-
+  
           setUserTrips(tripsWithParsedPhotos);
           setLoading(false);
         }
@@ -42,7 +49,7 @@ const Reservations = () => {
         console.error("Client Error:", error.message);
       }
     };
-
+  
     fetchBookings();
   }, [userId]);
 
