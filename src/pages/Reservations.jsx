@@ -14,7 +14,7 @@ const Reservations = () => {
     const fetchBookings = async () => {
       try {
         const response = await api.get(`/${userId}/myBookingsWithDetails`);
-        console.log("Reservations:", response.data);
+        console.log("Reservations3:", response.data);
         if (response.data) {
           const tripsWithParsedPhotos = response.data.map((trip) => {
             return {
@@ -23,12 +23,7 @@ const Reservations = () => {
                 try {
                   // Remove "http://localhost:8000/uploads/" or similar unwanted parts
                   let cleanPhotoUrl = photo.replace("http://localhost:8000", "");
-  
-                  // Ensure the photo URL starts with '/uploads/'
-                  if (!cleanPhotoUrl.startsWith("/uploads/")) {
-                    cleanPhotoUrl = `/uploads/${cleanPhotoUrl}`;
-                  }
-  
+
                   // Return the final URL with the backend URL prepended
                   return `https://dreamnest-backend.onrender.com${cleanPhotoUrl}`;
                 } catch (error) {
