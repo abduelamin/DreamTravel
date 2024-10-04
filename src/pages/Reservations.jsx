@@ -23,7 +23,6 @@ const Reservations = () => {
                 try {
                   // Remove "http://localhost:8000/uploads/" or similar unwanted parts
                   let cleanPhotoUrl = photo.replace("http://localhost:8000", "");
-
                   // Return the final URL with the backend URL prepended
                   return `https://dreamnest-backend.onrender.com${cleanPhotoUrl}`;
                 } catch (error) {
@@ -37,6 +36,7 @@ const Reservations = () => {
           setUserTrips(tripsWithParsedPhotos);
           setLoading(false);
         }
+        console.log("Reservations4:", response.data);
       } catch (error) {
         console.error("Client Error:", error.message);
       }
