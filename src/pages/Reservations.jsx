@@ -14,16 +14,22 @@ const Reservations = () => {
     const fetchBookings = async () => {
       try {
         const response = await api.get(`/${userId}/myBookingsWithDetails`);
-        console.log("Reservations3:", response.data);
+        console.log("Reservations4:", response.data);
         if (response.data) {
           const tripsWithParsedPhotos = response.data.map((trip) => {
             return {
               ...trip,
               photos: trip.photos.map((photo) => {
                 try {
-                  // Remove "http://localhost:8000/uploads/" or similar unwanted parts
-                  let cleanPhotoUrl = photo.replace("http://localhost:8000", "");
-                  // Return the final URL with the backend URL prepended
+                  // First, remove any unwanted localhost or other incorrect base URLs
+                  let cleanPhotoUrl = photo.replace(/http:\/\/localhost:8000\/uploads\/|https:\/\/dreamnest-backend\.onrender\.com\//g, "");
+  
+                  // Ensure that cleanPhotoUrl starts with 'uploads/'
+                  if (!cleanPhotoUrl.startsWith("/uploads/")) {
+                    cleanPhotoUrl = `/uploads/${cleanPhotoUrl}`;
+                  }
+  
+                  // Return the correctly formed final URL
                   return `https://dreamnest-backend.onrender.com${cleanPhotoUrl}`;
                 } catch (error) {
                   console.error("Error parsing photo:", error);
@@ -36,7 +42,7 @@ const Reservations = () => {
           setUserTrips(tripsWithParsedPhotos);
           setLoading(false);
         }
-        console.log("Reservations4:", response.data);
+        console.log("Reservations5:", response.data);
       } catch (error) {
         console.error("Client Error:", error.message);
       }
@@ -44,6 +50,7 @@ const Reservations = () => {
   
     fetchBookings();
   }, [userId]);
+  
 
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState({});
 
