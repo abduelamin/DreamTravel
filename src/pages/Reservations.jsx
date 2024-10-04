@@ -21,19 +21,16 @@ const Reservations = () => {
               ...trip,
               photos: trip.photos.map((photo) => {
                 try {
-                  const jsonString = photo.match(/{.*}/);
-                  if (jsonString) {
-                    const parsedPhoto = JSON.parse(jsonString[0]);
+                  // Remove "http://localhost:8000/uploads/" or similar unwanted parts
+                  let cleanPhotoUrl = photo.replace("http://localhost:8000", "");
   
-                    // Check if the photo URL is already fully qualified
-                    if (parsedPhoto.filename.includes("http")) {
-                      return parsedPhoto.filename;  // Return as is if it's a full URL
-                    }
-  
-                    // If it's just a filename, prepend the base URL
-                    return `https://dreamnest-backend.onrender.com/uploads/${parsedPhoto.filename}`;
+                  // Ensure the photo URL starts with '/uploads/'
+                  if (!cleanPhotoUrl.startsWith("/uploads/")) {
+                    cleanPhotoUrl = `/uploads/${cleanPhotoUrl}`;
                   }
-                  return "";
+  
+                  // Return the final URL with the backend URL prepended
+                  return `https://dreamnest-backend.onrender.com${cleanPhotoUrl}`;
                 } catch (error) {
                   console.error("Error parsing photo:", error);
                   return "";
