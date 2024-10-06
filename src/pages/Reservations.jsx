@@ -14,7 +14,6 @@ const Reservations = () => {
     const fetchBookings = async () => {
       try {
         const response = await api.get(`/${userId}/myBookingsWithDetails`);
-        console.log("Reservations4:", response.data);
         
         if (response.data) {
           const tripsWithParsedPhotos = response.data.map((trip) => {
@@ -30,7 +29,6 @@ const Reservations = () => {
           setLoading(false);
         }
         
-        console.log("Reservations5:", response.data);
       } catch (error) {
         console.error("Client Error:", error.message);
       }

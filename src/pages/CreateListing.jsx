@@ -115,7 +115,6 @@ const CreateListing = () => {
 
     try {
       const response = await api.post("/create-listing", formData,);
-      console.log(response.data);
       if (response.data.message) {
         toast.success(response.data.message , {
         className: 'bg-green-500 text-white',

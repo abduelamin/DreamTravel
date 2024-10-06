@@ -12,7 +12,6 @@ const Wishlist = () => {
     const fetchWishList = async () => {
       try {
         const response = await api.get(`/wishlist/${user.id}`);
-        console.log("wishlist:", response.data);
   
       
           setFavourites(response.data);

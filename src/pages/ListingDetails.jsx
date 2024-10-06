@@ -39,8 +39,6 @@ const ListingDetails = () => {
           `https://dreamnest-backend.onrender.com/api/properties/${listingId}`
         );
         const listingData = response.data;
-
-        console.log("lisitingDetalsPage:", response.data);
         // Parse facilities
         listingData.facilities = listingData.facilities.map(
           (facilityString) => {
@@ -197,7 +195,7 @@ const ListingDetails = () => {
         <Box display="flex" alignItems="center" justifyContent="center">
           {listing.profile_picture_url && (
             <Avatar
-              src={`https://dreamnest-backend.onrender.com${listing.profile_picture_url}`}
+              src={listing.profile_picture_url}
               alt={`${listing.firstname}'s profile`}
               sx={{ width: 64, height: 64, mr: 2 }}
             />

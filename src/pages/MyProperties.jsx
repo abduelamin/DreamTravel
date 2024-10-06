@@ -12,7 +12,6 @@ const MyProperties = () => {
     const fetchMyProperties = async () => {
       try {
         const response = await api.get(`/my-properties/${user.id}`);
-        console.log("myproperties:", response.data);
 
         setProperties(response.data);
       } catch (error) {

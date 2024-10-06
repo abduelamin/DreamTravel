@@ -49,7 +49,6 @@ const RegisterPage = () => {
   const onFormSubmit = async (data) => {
     try {
       const response = await signUp(data, profileImage);
-      console.log(response.data);
       navigate("/login")
     } catch (error) {
       console.error(error);

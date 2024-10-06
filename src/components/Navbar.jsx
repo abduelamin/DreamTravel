@@ -11,7 +11,6 @@ const Navbar = () => {
   const { user } = useContext(context);
   const [dropdownMenu, setDropdownMenu] = useState(false);
 
- console.log(user);
 
 
   const handleClick = () => {
