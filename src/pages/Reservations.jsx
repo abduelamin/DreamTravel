@@ -15,12 +15,13 @@ const Reservations = () => {
       try {
         const response = await api.get(`/${userId}/myBookingsWithDetails`);
         console.log("Reservations4:", response.data);
+        
         if (response.data) {
           const tripsWithParsedPhotos = response.data.map((trip) => {
             return {
               ...trip,
               photos: trip.photos.map((photo) => {
-              return photo
+                return photo.replace("http://localhost:8000/uploads/", "");
               }),
             };
           });
@@ -28,6 +29,7 @@ const Reservations = () => {
           setUserTrips(tripsWithParsedPhotos);
           setLoading(false);
         }
+        
         console.log("Reservations5:", response.data);
       } catch (error) {
         console.error("Client Error:", error.message);
@@ -36,7 +38,6 @@ const Reservations = () => {
   
     fetchBookings();
   }, [userId]);
-  
 
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState({});
 

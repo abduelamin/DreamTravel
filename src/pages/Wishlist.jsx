@@ -10,23 +10,12 @@ const Wishlist = () => {
 
   useEffect(() => {
     const fetchWishList = async () => {
-        try {
-          const response = await api.get(`/wishlist/${user.id}`);
-          const dataWithParsedPhotos = response.data.map((listing) => {
-            const parsedPhotos = listing.photos.map((photo) => {
-              try {
-                const photoObject = JSON.parse(photo);
-                return photoObject.filename; 
-              } catch (error) {
-                console.error("Error parsing photo:", error);
-                return "";
-              }
-            });
-            return { ...listing, photos: parsedPhotos };
-          });
+      try {
+        const response = await api.get(`/wishlist/${user.id}`);
+        console.log("wishlist:", response.data);
+  
       
-          setFavourites(dataWithParsedPhotos);
-          console.log(dataWithParsedPhotos);
+          setFavourites(response.data);
         } catch (error) {
           console.log("Failed to fetch wishlist", error.message);
         }
