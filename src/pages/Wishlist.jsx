@@ -38,7 +38,7 @@ const Wishlist = () => {
         >
           <div className="relative">
             <img
-              src={`https://dreamnest-backend.onrender.com/uploads/${fav.photos[0]}`} 
+              src={fav.photos[0]} 
               alt={fav.title}
               className="w-full h-56 object-cover transition duration-500 transform group-hover:scale-110"
             />

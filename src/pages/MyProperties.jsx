@@ -13,15 +13,8 @@ const MyProperties = () => {
       try {
         const response = await api.get(`/my-properties/${user.id}`);
         console.log("myproperties:", response.data);
-        const resWithParsedPhotos = response.data.map((listing) => {
-          const parsePhoto = listing.photos.map((photo) => {
-            const photoObject = JSON.parse(photo);
-            return photoObject.filename;
-          });
-          return { ...listing, photos: parsePhoto };
-        });
 
-        setProperties(resWithParsedPhotos);
+        setProperties(response.data);
       } catch (error) {
         console.error("Failed to fetch properties", error.message);
       }
@@ -42,20 +35,27 @@ const MyProperties = () => {
           className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 cursor-pointer"
           onClick={() => handleNavigate(property.id)}
         >
-          <img
-            src={`https://dreamnest-backend.onrender.com/uploads/${property.photos[0]}`}
-            alt={property.title}
-            className="w-full h-48 object-cover"
-          />
+          {/* Only display the image if photos array exists and has at least one element */}
+          {property.photos && property.photos.length > 0 && (
+            <img
+              src={property.photos[0]} 
+              alt={property.title || "Property Image"}
+              className="w-full h-48 object-cover"
+            />
+          )}
           <div className="p-4">
-            <h3 className="text-xl font-bold mb-2">{property.title}</h3>
-            <p className="text-gray-700 mb-2">{property.description}</p>
+            <h3 className="text-xl font-bold mb-2">
+              {property.title || "Untitled Property"} 
+            </h3>
+            <p className="text-gray-700 mb-2">
+              {property.description || "No description available."}
+            </p>
             <div className="flex items-center justify-between">
               <span className="text-lg font-semibold text-blue-600">
-                ${property.price}
+                ${property.price || "N/A"} 
               </span>
               <span className="text-sm text-gray-500">
-                Beds: {property.beds} | Baths: {property.bathrooms}
+                Beds: {property.beds || 0} | Baths: {property.bathrooms || 0} 
               </span>
             </div>
             <button className="mt-2 text-white bg-blue-500 hover:bg-blue-600 transition duration-200 px-4 py-2 rounded">
