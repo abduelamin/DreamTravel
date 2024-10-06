@@ -13,13 +13,15 @@ const ListingCard = ({ listing }) => {
   });
 
   // Slider functions for navigating between images
-  const goToPrevSlide = () => {
+  const goToPrevSlide = (e) => {
+    e.stopPropagation()
     setCurrentIndex(
       (prev) => (prev - 1 + parsedPhotos.length) % parsedPhotos.length
     );
   };
 
-  const goToNextSlide = () => {
+  const goToNextSlide = (e) => {
+    e.stopPropagation()
     setCurrentIndex((prev) => (prev + 1) % parsedPhotos.length);
   };
 
