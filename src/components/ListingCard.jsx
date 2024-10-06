@@ -30,14 +30,14 @@ const ListingCard = ({ listing }) => {
   };
 
   return (
-    <div className="relative cursor-pointer p-4 rounded-lg hover:shadow-lg" onClick={takeTolistingDetails}>
-      <div className="w-72 overflow-hidden rounded-lg mb-4">
+    <div className="relative cursor-pointer p-4 rounded-lg hover:shadow-lg w-full max-w-xs" onClick={takeTolistingDetails}>
+      <div className="w-full h-64 overflow-hidden rounded-lg mb-4 relative">
         <div
           className="flex transition-transform duration-500"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
           {parsedPhotos.map((photo, index) => (
-            <div className="relative flex-shrink-0 w-full h-64" key={index}>
+            <div className="relative flex-shrink-0 w-full h-full" key={index}>
               <img
                 src={photo}
                 alt="Home view"
@@ -59,10 +59,15 @@ const ListingCard = ({ listing }) => {
           ))}
         </div>
       </div>
-      <h3 className="text-lg font-semibold">{listing.title} </h3>
-      {listing.category_name !== 'All' && <p className="text-sm">{listing.category_name}</p>}
-      <p className="text-sm">{listing.description}</p>
-      <span className="text-lg font-bold">${listing.price}</span>
+
+      <div className="w-full">
+        <h3 className="text-lg font-semibold">{listing.title}</h3>
+        {listing.category_name !== 'All' && (
+          <p className="text-sm text-gray-500">{listing.category_name}</p>
+        )}
+        <p className="text-sm text-gray-700">{listing.description}</p>
+        <span className="text-lg font-bold text-blue-600">${listing.price}</span>
+      </div>
     </div>
   );
 };
