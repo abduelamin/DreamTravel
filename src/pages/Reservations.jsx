@@ -20,21 +20,7 @@ const Reservations = () => {
             return {
               ...trip,
               photos: trip.photos.map((photo) => {
-                try {
-                  // First, remove any unwanted localhost or other incorrect base URLs
-                  let cleanPhotoUrl = photo.replace(/http:\/\/localhost:8000\/uploads\/|https:\/\/dreamnest-backend\.onrender\.com\//g, "");
-  
-                  // Ensure that cleanPhotoUrl starts with 'uploads/'
-                  if (!cleanPhotoUrl.startsWith("/uploads/")) {
-                    cleanPhotoUrl = `/uploads/${cleanPhotoUrl}`;
-                  }
-  
-                  // Return the correctly formed final URL
-                  return `https://dreamnest-backend.onrender.com${cleanPhotoUrl}`;
-                } catch (error) {
-                  console.error("Error parsing photo:", error);
-                  return "";
-                }
+              return photo
               }),
             };
           });

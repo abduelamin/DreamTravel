@@ -8,14 +8,8 @@ const ListingCard = ({ listing }) => {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Process photos to normalize URLs
   const parsedPhotos = listing.photos.map((photo) => {
-    // If the photo is already a full URL, return it as is
-    // if (photo.startsWith("http://") || photo.startsWith("https://")) {
-    //   return photo;
-    // }
-    // Otherwise, treat it as a relative path and prepend your backend URL
-    return `https://dreamnest-backend.onrender.com${photo}`;
+    return photo
   });
 
   // Slider functions for navigating between images

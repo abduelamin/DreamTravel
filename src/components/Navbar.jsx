@@ -68,7 +68,7 @@ const Navbar = () => {
           <Menu sx={{ color: "#969393" }} />
           {user ? (
             <img
-              src={`https://dreamnest-backend.onrender.com${user.profileImage}`}
+              src={user.profileImage}
               alt="Profile"
               className="w-10 h-10 object-cover rounded-full"
             />
