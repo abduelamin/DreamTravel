@@ -44,7 +44,7 @@ const Listings = () => {
       </div>
 
       {loading ? (
-        <Loader />
+        <Loader /> 
       ) : (
         <div className="listings w-screen px-20 py-12 sm:px-5 flex justify-center flex-wrap gap-5">
           {listings.length > 0 ? (
