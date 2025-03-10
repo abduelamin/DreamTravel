@@ -36,7 +36,7 @@ const ListingDetails = () => {
     const getListingDetails = async () => {
       try {
         const response = await axios.get(
-          `dream-travel-backend.vercel.app/api/properties/${listingId}`
+          `https://dream-travel-backend.vercel.app/api/properties/${listingId}`
         );
         const listingData = response.data;
         // Parse facilities
