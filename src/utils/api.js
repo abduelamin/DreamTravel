@@ -1,6 +1,6 @@
-import axios from 'axios'
+import axios from "axios";
 
-export default  axios.create({
-    baseURL: 'https://dreamnest-backend.onrender.com/api',
-    withCredentials: true,
-})
+export default axios.create({
+  baseURL: "dream-travel-backend.vercel.app/api",
+  withCredentials: true,
+});

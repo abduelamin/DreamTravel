@@ -36,7 +36,7 @@ const ListingDetails = () => {
     const getListingDetails = async () => {
       try {
         const response = await axios.get(
-          `https://dreamnest-backend.onrender.com/api/properties/${listingId}`
+          `dream-travel-backend.vercel.app/api/properties/${listingId}`
         );
         const listingData = response.data;
         // Parse facilities
@@ -52,7 +52,7 @@ const ListingDetails = () => {
           }
         );
         listingData.photos = listingData.photos.map((photoString) => {
-          return photoString.replace('http://localhost:8000/uploads/', "")
+          return photoString.replace("http://localhost:8000/uploads/", "");
         });
 
         setListing(listingData);
@@ -101,9 +101,7 @@ const ListingDetails = () => {
         try {
           const response = await api.get(`/wishlist/${user.id}`);
           const watchlistItems = response.data;
-          const isListed = watchlistItems.some(
-            (item) => item.id == listingId
-          );
+          const isListed = watchlistItems.some((item) => item.id == listingId);
           setIsInWatchlist(isListed);
         } catch (error) {
           console.error("Error fetching watchlist status:", error);
